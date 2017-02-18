@@ -64,10 +64,10 @@ classifier.add(Dense(output_dim=(11+1)/2,init='uniform',activation='relu',input_
 #Adding Second Hidden Layer
 classifier.add(Dense(output_dim=(11+1)/2,init='uniform',activation='relu'))
 
-#Adding Output Layer   if dependencies param > 2  change output_dim=x and activation=submoid
+#Adding Output Layer   if dependencies param > 2  change output_dim=x and activation=softmax
 classifier.add(Dense(output_dim=1,init='uniform',activation='sigmoid'))
 
-#Part 3 - Make Prediction and Evaluating the model if dependencies param > 2  change loss='catagorial_crossentropy'
+#Part 3 - Make Prediction and Evaluating the model if dependencies param > 2  change loss='categorical_crossentropy'
 classifier.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 
 # Fitting ANN to the Training set
