@@ -76,10 +76,12 @@ classifier.fit_generator(train_set,
                          nb_val_samples=800)
 
 from keras.preprocessing import image as image_utils
-test_image = image_utils.load_img('dataset/test_image/nott_cat.jpg', target_size=(64, 64))
+test_image = image_utils.load_img('dataset/test_image/cat.4003.jpg', target_size=(64, 64))
+test_image = image_utils.load_img('dataset/training_set/dogs/dog.8.jpg', target_size=(64, 64))
+test_image = image_utils.load_img('dataset/training_set/cats/cat.10.jpg', target_size=(64, 64))
 test_image = image_utils.img_to_array(test_image)
 test_image = np.expand_dims(test_image, axis=0)
-y_pred = classifier.predict(test_image)
+y_pred = classifier.predict(test_image,batch_size=32)
 y_pred
 
 
