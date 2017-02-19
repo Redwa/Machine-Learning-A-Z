@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sun Feb 19 15:41:09 2017
+Created on Sun Feb 19 19:21:58 2017
 
 @author: Nott
 """
 
-#PCA
+#LDA
 
 #logistic regression
 # Importing the libraries
@@ -28,12 +28,11 @@ sc = StandardScaler()
 X_train = sc.fit_transform(X_train)
 X_test = sc.transform(X_test)
 
-#Applying PCA
-from sklearn.decomposition import PCA
-pca = PCA(n_components = 2)
-X_train = pca.fit_transform(X_train)
-X_test = pca.transform(X_test)
-explained_variance = pca.explained_variance_ratio_
+#Applying LDA
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
+lda = LDA(n_components = 2)
+X_train = lda.fit_transform(X_train, y_train)
+X_test = lda.transform(X_test)
 
 #fit logistic regression to training set
 from sklearn.linear_model import LogisticRegression
@@ -59,9 +58,9 @@ plt.ylim(X2.min(), X2.max())
 for i, j in enumerate(np.unique(y_set)):
     plt.scatter(X_set[y_set == j, 0], X_set[y_set == j, 1],
                 c = ListedColormap(('red', 'green', 'blue'))(i), label = j)
-plt.title('Logistic Regression PCA (Training set)')
-plt.xlabel('PC1')
-plt.ylabel('PC2')
+plt.title('Logistic Regression LDA (Training set)')
+plt.xlabel('LD1')
+plt.ylabel('LD2')
 plt.legend()
 plt.show()
 
@@ -77,8 +76,8 @@ plt.ylim(X2.min(), X2.max())
 for i, j in enumerate(np.unique(y_set)):
     plt.scatter(X_set[y_set == j, 0], X_set[y_set == j, 1],
                 c = ListedColormap(('red', 'green', 'blue'))(i), label = j)
-plt.title('Logistic Regression PCA (Test set)')
-plt.xlabel('PC1')
-plt.ylabel('PC2')
+plt.title('Logistic Regression LDA (Test set)')
+plt.xlabel('LD1')
+plt.ylabel('LD2')
 plt.legend()
 plt.show()
