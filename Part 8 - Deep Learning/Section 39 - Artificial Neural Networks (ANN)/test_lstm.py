@@ -16,6 +16,8 @@ from keras.layers.convolutional import Convolution1D
 from keras.layers.convolutional import MaxPooling1D
 from keras.layers.embeddings import Embedding
 from keras.preprocessing import sequence
+import matplotlib.pyplot as plt
+from keras.callbacks import History
 
 
 #Create Data
@@ -52,8 +54,38 @@ model.add(GRU(200, input_shape=X_train.shape[1:]))
 model.add(Dense(1, activation='sigmoid'))
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 print(model.summary())
-model.fit(X_train, y_train, batch_size=10, nb_epoch=3, validation_data=(X_test, y_test))
+history = model.fit(X_train, y_train, batch_size=64, nb_epoch=3, validation_data=(X_test, y_test))
+
+"""embedding_vecor_length = 32
+model = Sequential()
+model.add(Embedding(1000, embedding_vecor_length, input_length=10))
+model.add(Convolution1D(nb_filter=32, filter_length=3, border_mode='same', activation='relu'))
+model.add(MaxPooling1D(pool_length=2))
+model.add(LSTM(100))
+model.add(Dense(1, activation='sigmoid'))
+model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+print(model.summary())
+model.fit(X_train, y_train, nb_epoch=3, batch_size=64)"""
 
 # Final evaluation of the model
 scores = model.evaluate(X_test, y_test, verbose=0)
 print("Accuracy: %.2f%%" % (scores[1]*100))
+
+# list all data in history
+print(history.history.keys())
+# summarize history for accuracy
+plt.plot(history.history['acc'])
+plt.plot(history.history['val_acc'])
+plt.title('model accuracy')
+plt.ylabel('accuracy')
+plt.xlabel('epoch')
+plt.legend(['train', 'test'], loc='upper left')
+plt.show()
+# summarize history for loss
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.title('model loss')
+plt.ylabel('loss')
+plt.xlabel('epoch')
+plt.legend(['train', 'test'], loc='upper left')
+plt.show()
