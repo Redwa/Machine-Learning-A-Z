@@ -59,34 +59,54 @@ from keras.layers import Dense
 classifier = Sequential()
 
 #Adding the Input layer and First hidden layers
-classifier.add(Dense(output_dim=(11+1)/2,init='uniform',activation='relu',input_dim=11))
+classifier.add(Dense(units=6,kernel_initializer='uniform',activation='relu',input_dim=11))
 
 #Adding Second Hidden Layer
-classifier.add(Dense(output_dim=(11+1)/2,init='uniform',activation='relu'))
+classifier.add(Dense(units=6,kernel_initializer='uniform',activation='relu'))
 
 #Adding Output Layer   if dependencies param > 2  change output_dim=x and activation=softmax
-classifier.add(Dense(output_dim=1,init='uniform',activation='sigmoid'))
+classifier.add(Dense(units=1,kernel_initializer='uniform',activation='sigmoid'))
 
 #Part 3 - Make Prediction and Evaluating the model if dependencies param > 2  change loss='categorical_crossentropy'
 classifier.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 
 # Fitting ANN to the Training set
-classifier.fit(X_train, y_train, batch_size=10 ,nb_epoch=100)
+classifier.fit(X_train, y_train, batch_size=10 ,epochs=100)
 
 # Predicting the Test set results
 y_pred = classifier.predict(X_test)
 y_pred = (y_pred > 0.5)
+
+#Predict new single test
+new_prediction = classifier.predict(sc.transform(np.array([[0.0,0,600,1,40,3,60000,2,1,1,50000]])))
+new_prediction = (new_prediction > 0.5)
+
 # Making the Confusion Matrix
 from sklearn.metrics import confusion_matrix
 cm = confusion_matrix(y_test, y_pred)
 
 
+#Evaluating ANN
+from keras.wrappers.scikit_learn import KerasClassifier
+from sklearn.model_selection import cross_val_score
+def build_classifier():
+    classifier = Sequential()
+    classifier.add(Dense(units=6,kernel_initializer='uniform',activation='relu',input_dim=11))
+    classifier.add(Dense(units=6,kernel_initializer='uniform',activation='relu'))
+    classifier.add(Dense(units=1,kernel_initializer='uniform',activation='sigmoid'))
+    classifier.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+    return classifier
+classifier = KerasClassifier(build_fn = build_classifier, batch_size = 10, epochs = 100)
+accuracies = cross_val_score(estimator = classifier, X = X_train, y = y_train, cv = 10)
+mean = accuracies.mean()
+variance = accuracies.std()
 
 
+#Improving ANN
 
+#Dropout Regularrizaion to Reduce overfitting if it needed
 
-
-
+#Tuning ANN
 
 
 
