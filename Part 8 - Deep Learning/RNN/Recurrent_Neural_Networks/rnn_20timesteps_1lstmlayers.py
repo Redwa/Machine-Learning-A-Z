@@ -25,7 +25,17 @@ for i in range(20, 1258):
 X_train, y_train = np.array(X_train), np.array(y_train)
 
 # Reshaping
+# for single feature
 X_train = np.reshape(X_train, (X_train.shape[0], X_train.shape[1], 1))
+
+""" # for multi-features
+# Reshaping
+X_train1 = np.reshape(X_train, (X_train.shape[0], X_train.shape[1], 1))
+#Assume it is new feature S&P500
+X_train2 = np.reshape(X_train, (X_train.shape[0], X_train.shape[1], 1))
+X_train = np.dstack((X_train1,X_train2))
+"""
+
 
 # Part 2 - Building the RNN
 
@@ -39,6 +49,7 @@ regressor = Sequential()
 
 # Adding the input layer and the LSTM layer
 regressor.add(LSTM(units = 3, input_shape = (None, 1)))
+#regressor.add(LSTM(units = 3, input_shape = (None, 2))) #for multi-features
 
 # Adding the output layer
 regressor.add(Dense(units = 1))
@@ -62,7 +73,16 @@ inputs = []
 for i in range(1258, 1278):
     inputs.append(scaled_real_stock_price[i-20:i, 0])
 inputs = np.array(inputs)
+# for single feature
 inputs = np.reshape(inputs, (inputs.shape[0], inputs.shape[1], 1))
+
+""" # for multi-features
+inputs1 = np.reshape(inputs, (inputs.shape[0], inputs.shape[1], 1))
+#Assume it is new feature S&P500
+inputs2 = np.reshape(inputs, (inputs.shape[0], inputs.shape[1], 1))
+inputs = np.dstack((inputs1,inputs2))
+"""
+
 predicted_stock_price = regressor.predict(inputs)
 predicted_stock_price = sc.inverse_transform(predicted_stock_price)
 
